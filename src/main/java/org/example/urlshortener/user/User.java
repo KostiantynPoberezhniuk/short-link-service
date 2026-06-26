@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
@@ -31,7 +32,7 @@ public class User {
     private Role role = Role.USER;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt = Instant.now();
+    private Instant createdAt;
 
     protected User() {
     }
@@ -40,6 +41,11 @@ public class User {
         this.username = username;
         this.password = password;
         this.role = role;
+    }
+
+    @PrePersist
+    void onCreate() {
+        createdAt = Instant.now();
     }
 
     public Long getId() {

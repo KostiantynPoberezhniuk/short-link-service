@@ -1,6 +1,7 @@
 package org.example.urlshortener.link;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,4 +21,12 @@ public interface ShortLinkRepository extends JpaRepository<ShortLink, Long> {
     List<ShortLink> findActiveByOwnerId(@Param("ownerId") Long ownerId, @Param("now") Instant now);
 
     Optional<ShortLink> findByIdAndOwnerId(Long id, Long ownerId);
+
+    @Modifying
+    @Query("""
+            UPDATE ShortLink l
+            SET l.visitCount = l.visitCount + 1
+            WHERE l.shortCode = :shortCode
+            """)
+    int incrementVisitCount(@Param("shortCode") String shortCode);
 }

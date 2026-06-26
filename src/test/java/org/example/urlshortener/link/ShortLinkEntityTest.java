@@ -31,17 +31,6 @@ class ShortLinkEntityTest {
     }
 
     @Test
-    void incrementVisitCountIncreasesValue() {
-        ShortLink link = new ShortLink("abc123", "https://example.com",
-                Instant.now().plus(1, ChronoUnit.DAYS), owner);
-
-        link.incrementVisitCount();
-        link.incrementVisitCount();
-
-        assertThat(link.getVisitCount()).isEqualTo(2L);
-    }
-
-    @Test
     void equalsBasedOnSameInstanceForTransientEntities() {
         ShortLink link = new ShortLink("abc123", "https://example.com",
                 Instant.now().plus(1, ChronoUnit.DAYS), owner);

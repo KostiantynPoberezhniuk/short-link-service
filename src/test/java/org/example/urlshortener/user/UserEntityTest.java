@@ -16,7 +16,6 @@ class UserEntityTest {
         assertThat(user.getUsername()).isEqualTo("bob");
         assertThat(user.getPassword()).isEqualTo("secret");
         assertThat(user.getRole()).isEqualTo(Role.ADMIN);
-        assertThat(user.getCreatedAt()).isNotNull();
     }
 
     @Test
