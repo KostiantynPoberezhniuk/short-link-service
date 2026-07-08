@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import org.example.urlshortener.user.User;
 
@@ -29,7 +30,7 @@ public class ShortLink {
     private String originalUrl;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt = Instant.now();
+    private Instant createdAt;
 
     @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
@@ -51,12 +52,13 @@ public class ShortLink {
         this.owner = owner;
     }
 
-    public boolean isExpired() {
-        return Instant.now().isAfter(expiresAt);
+    @PrePersist
+    void onCreate() {
+        createdAt = Instant.now();
     }
 
-    public void incrementVisitCount() {
-        this.visitCount++;
+    public boolean isExpired() {
+        return Instant.now().isAfter(expiresAt);
     }
 
     public Long getId() {

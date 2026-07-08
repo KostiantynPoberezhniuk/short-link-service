@@ -21,7 +21,20 @@ repositories {
 ext {
     jjwtVersion = '0.12.6'
     springdocVersion = '2.7.0'
-    testcontainersVersion = '1.20.4'
+    dockerJavaVersion = '3.7.1'
+    // Override the Testcontainers version managed by the Spring Boot BOM.
+    set('testcontainers.version', '1.21.4')
+}
+
+configurations.all {
+    // Testcontainers 1.21.x ships docker-java 3.4.x, which cannot talk to recent Docker Engine
+    // releases (the daemon answers /info with HTTP 400). Force a newer docker-java client.
+    resolutionStrategy {
+        force "com.github.docker-java:docker-java-api:${dockerJavaVersion}"
+        force "com.github.docker-java:docker-java-core:${dockerJavaVersion}"
+        force "com.github.docker-java:docker-java-transport:${dockerJavaVersion}"
+        force "com.github.docker-java:docker-java-transport-zerodep:${dockerJavaVersion}"
+    }
 }
 
 dependencies {
@@ -44,8 +57,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
-    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

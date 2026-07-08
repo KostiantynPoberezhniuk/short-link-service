@@ -234,7 +234,7 @@ class ShortLinkServiceTest {
         String url = service.resolveAndTrack("gggggg");
 
         assertThat(url).isEqualTo("https://example.com");
-        assertThat(link.getVisitCount()).isEqualTo(1L);
+        verify(shortLinkRepository).incrementVisitCount("gggggg");
     }
 
     @Test
@@ -253,7 +253,7 @@ class ShortLinkServiceTest {
 
         assertThatThrownBy(() -> service.resolveAndTrack("hhhhhh"))
                 .isInstanceOf(LinkExpiredException.class);
-        assertThat(link.getVisitCount()).isZero();
+        verify(shortLinkRepository, never()).incrementVisitCount(anyString());
     }
 
     private static Long eqUser() {

@@ -98,7 +98,7 @@ public class ShortLinkService {
         if (link.isExpired()) {
             throw new LinkExpiredException("Short link has expired: " + shortCode);
         }
-        link.incrementVisitCount();
+        shortLinkRepository.incrementVisitCount(shortCode);
         return link.getOriginalUrl();
     }
 
